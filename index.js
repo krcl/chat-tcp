@@ -18,11 +18,12 @@ const net = require('net');
 // Create a TCP server
 const server = net.createServer((socket) => {
   console.log('Client connected');
-
   // Event handler for data reception
   socket.on('data', (data) => {
-    console.log(`Received data from client: ${data}`);
-    console.log("DATA: ", `-${data.toString().trim()}-`);
+    const message = JSON.parse(data.toString());
+    console.log("################################");
+    console.log("MESSAGE: ", `-${message}-`);
+    console.log("################################");
     if(data.toString().trim() === 'time') {
       // Echo back the current time
       socket.write(`Server time: ${new Date().toISOString()}`);
