@@ -22,7 +22,7 @@ const server = net.createServer((socket) => {
   socket.on('data', (data) => {
     const message = JSON.parse(data.toString());
     console.log("################################");
-    console.log("MESSAGE: ", `-${message}-`);
+    console.log("MESSAGE: ", `-${JSON.stringify(message, null, 2)}-`);
     console.log("################################");
     if(data.toString().trim() === 'time') {
       // Echo back the current time
