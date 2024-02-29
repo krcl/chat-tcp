@@ -36,7 +36,7 @@ const server = net.createServer((socket) => {
       socket.write(`Client name set to: ${socket.__name}\n`);
       clients.push(socket);
     }
-    if( message === '/time') {
+    else if( message === '/time') {
       // Echo back the current time
       socket.write(`Server time: ${new Date().toISOString()}`);
     }
