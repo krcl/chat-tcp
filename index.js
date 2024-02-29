@@ -36,21 +36,25 @@ const server = net.createServer((socket) => {
       socket.write(`Client name set to: ${socket.__name}\n`);
       clients.push(socket);
     }
-    else if( message === '/time') {
+    else if( message.startsWith('/time')) {
       // Echo back the current time
       socket.write(`Server time: ${new Date().toISOString()}`);
     }
-    else if( message === '/exit' || message === '/quit') {
+    else if( message.startsWith('/exit') || message.startsWith('/quit')) {
       // Close the connection
       socket.end();
     }
-    else {
+    else if( message.startsWith('/m ')) {
       // Broadcast the message to all connected clients
       clients.forEach(client => {
         if(client !== socket) {
           client.write(`${socket.__name}: ${message}\n`);
         }
       });
+    }
+    else {
+      // Echo back the received message
+      socket.write(`Invalid command: ${message}\n`);
     }
   });
 
