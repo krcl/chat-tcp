@@ -47,9 +47,9 @@ const server = net.createServer((socket) => {
     else {
       // Broadcast the message to all connected clients
       clients.forEach(client => {
-        // if(client !== socket) {
-          client.write(`${socket.__name}: ${message}`);
-        // }
+        if(client !== socket) {
+          client.write(`${socket.__name}: ${message}\n`);
+        }
       });
     }
   });
