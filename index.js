@@ -49,8 +49,8 @@ const server = net.createServer((socket) => {
 });
 
 // Start listening on a specific port and host
-const PORT = 3000;
-const HOST = 'localhost';
+const PORT = process.env.PORT || 3300;
+const HOST = '0.0.0.0';
 server.listen(PORT, HOST, () => {
   console.log(`Server listening on ${HOST}:${PORT}`);
 });
