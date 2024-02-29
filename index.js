@@ -14,27 +14,41 @@ const net = require('net');
  * - How to implement commands, like the "time" example command.
  */
 
+const availableCommands = `
+Available commands:
+- /name <name> - Set the client name.
+- /time - Get the current server time.
+- /exit or /quit - Close the connection.
+`;
+
+const clients = [];
 
 // Create a TCP server
 const server = net.createServer((socket) => {
   console.log('Client connected');
   // Event handler for data reception
   socket.on('data', (data) => {
-    const message = JSON.parse(data.toString());
-    console.log("################################");
-    console.log("MESSAGE: ", `-${JSON.stringify(message, null, 2)}-`);
-    console.log("################################");
-    if(data.toString().trim() === 'time') {
+    const message = data.toString().trim();
+    if ( message.startsWith('/name') ) {
+      socket.__name = message.split(' ')[1];
+      socket.write(`Client name set to: ${socket.__name}`);
+      clients.push(socket);
+    }
+    if( message === '/time') {
       // Echo back the current time
       socket.write(`Server time: ${new Date().toISOString()}`);
     }
-    else if(data.toString() === 'exit' || data.toString() === 'quit') {
+    else if( message === '/exit' || message === '/quit') {
       // Close the connection
       socket.end();
     }
     else {
-      // Echo back the received data
-      socket.write(`Server received: ${data}`);
+      // Broadcast the message to all connected clients
+      clients.forEach(client => {
+        // if(client !== socket) {
+          client.write(`${socket.__name}: ${message}`);
+        // }
+      });
     }
   });
 
