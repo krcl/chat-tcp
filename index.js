@@ -26,12 +26,14 @@ const clients = [];
 // Create a TCP server
 const server = net.createServer((socket) => {
   console.log('Client connected');
+  socket.write('Welcome to the server!\n');
+  socket.write(`\t${availableCommands}\n`);
   // Event handler for data reception
   socket.on('data', (data) => {
     const message = data.toString().trim();
     if ( message.startsWith('/name') ) {
       socket.__name = message.split(' ')[1];
-      socket.write(`Client name set to: ${socket.__name}`);
+      socket.write(`Client name set to: ${socket.__name}\n`);
       clients.push(socket);
     }
     if( message === '/time') {
